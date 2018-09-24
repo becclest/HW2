@@ -3,7 +3,7 @@
   <form method="POST" action="http://localhost:5000/album_result">
       {{ form.hidden_tag() }}
       {% for message in get_flashed_messages() %}
-      {{ message }}
+      	{{ message }}
       {% endfor %}
       <p>{{ form.album.label }}{{ form.album() }}</p>
       <p>{{ form.rating.label }}{{ form.rating() }}</p>

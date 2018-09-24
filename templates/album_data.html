@@ -1,0 +1,11 @@
+
+{% block content %}
+    <p> The album title you just submitted was: <strong>{{ album }}</strong>
+    <br>
+    {% if rating == '1' %}
+        <p>On a scale of 1 to 3, you would give this album <strong> 1 </strong> star!</p>
+    {% else %}
+        <p>On a scale of 1 to 3, you would give this album <strong> {{ rating }} </strong> stars!</p>
+    {% endif %}
+    <br>
+{% endblock %}

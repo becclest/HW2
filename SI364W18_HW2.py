@@ -13,7 +13,7 @@
 #############################
 from flask import Flask, request, render_template, url_for, flash, redirect
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, RadioField, ValidationError
+from wtforms import StringField, SubmitField, RadioField
 from wtforms.validators import Required
 import requests
 import json
@@ -28,7 +28,15 @@ app.config['SECRET_KEY'] = 'hardtoguessstring'
 
 ####################
 ###### FORMS #######
-####################
+
+
+class AlbumEntryForm(FlaskForm):
+    album = StringField('Enter the name of an album: ',
+                        validators=[Required()])
+    rating = RadioField('How much do you like this album? (1 low, 3 high) ',
+                        choices=[('1', '1'), ('2', '2'), ('3', '3')],
+                        validators=[Required()])
+    submit = SubmitField('Submit')
 
 
 ####################
@@ -75,28 +83,21 @@ def specific(artist_name):
     return render_template('specific_artist.html', results=results)
 
 
-class AlbumEntryForm(FlaskForm):
-    album = StringField('Enter the name of an album: ',
-                        validators=[Required()])
-    rating = RadioField('How much do you like this album? (1 low, 3 high) ',
-                        choices=[('low', '1'), ('medium', '2'), ('high', '3')],
-                        validators=[Required()])
-    submit = SubmitField('Submit')
-
-
 @app.route('/album_entry')
 def album_entry():
     simpleForm = AlbumEntryForm()
     return render_template('album_entry.html', form=simpleForm)
 
-@app.route('/album_result')
-def result():
+
+@app.route('/album_result', methods=['GET', 'POST'])
+def album_result():
     form = AlbumEntryForm(request.form)
     if request.method == 'POST' and form.validate_on_submit():
         album = form.album.data
         rating = form.rating.data
-        return "Your name is {0} and your age is {1}".format(album, rating)
+        return render_template('album_data.html', album=album, rating=rating)
     flash('All fields are required!')
+    return redirect(url_for('album_entry'))
 
 
 if __name__ == '__main__':
