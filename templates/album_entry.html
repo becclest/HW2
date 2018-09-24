@@ -1,6 +1,6 @@
 {% block content %}
 <h1>Album Entry Form</h1>
-  <form method="POST" action="http://localhost:5000/itunes-result">
+  <form method="POST" action="http://localhost:5000/album_result">
       {{ form.hidden_tag() }}
       {% for message in get_flashed_messages() %}
       {{ message }}

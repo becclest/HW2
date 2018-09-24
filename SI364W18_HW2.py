@@ -88,7 +88,15 @@ class AlbumEntryForm(FlaskForm):
 def album_entry():
     simpleForm = AlbumEntryForm()
     return render_template('album_entry.html', form=simpleForm)
-# @app.route('/album_result')
+
+@app.route('/album_result')
+def result():
+    form = AlbumEntryForm(request.form)
+    if request.method == 'POST' and form.validate_on_submit():
+        album = form.album.data
+        rating = form.rating.data
+        return "Your name is {0} and your age is {1}".format(album, rating)
+    flash('All fields are required!')
 
 
 if __name__ == '__main__':
