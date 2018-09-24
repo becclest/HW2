@@ -3,7 +3,7 @@
 <span><i>Check out their first three songs on iTunes:</i></span><br>
 
 <ul>
-{% for item in results[:3] %}
+	{% for item in results[:3] %}
 	<li>{{ item["trackName"] }}</li>
-{% endfor %}
+	{% endfor %}
 </ul>

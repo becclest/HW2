@@ -45,43 +45,37 @@ def hello_user(name):
     return '<h1>Hello {0}<h1>'.format(name)
 
 
-class artistForm(FlaskForm):
-    artist = StringField('Enter artist', validators=[Required()])
-    submit = SubmitField('Submit')
-
-
 @app.route('/artistform')
 def artist_form():
-    simpleForm = artistForm()
-    return render_template('artistform.html', form=simpleForm)
+    return render_template('artistform.html')
 
 
 @app.route('/artistinfo', methods=['GET', 'POST'])
 def artist_info():
-    form = artistForm(request.form)
-    if request.method == 'POST' and form.validate_on_submit():
-        params = {}
-        params['term'] = form.artist.data
+    if request.method == 'GET':
+        artist = request.args.get("artist")
+        params = {'term': artist}
         response = requests.get(
-            'https://itunes.apple.com/search', params=params)
+            'https://itunes.apple.com/search?', params=params)
         results = json.loads(response.text)['results']
         return render_template('artist_info.html', objects=results)
-    flash('All fields are required!')
-    # this redirects you to itunes_form if there are errors
     return redirect(url_for('artist_form'))
 
 
-'''
 @app.route('/artistlinks')
 def links():
     return render_template('artist_links.html')
 
 
-@app.route('/specific/song/<artist_name')
-def specific():
-    return render_template('specific_artist.html')
+@app.route('/specific/song/<artist_name>')
+def specific(artist_name):
+    params = {'term': artist_name}
+    response = requests.get('https://itunes.apple.com/search?', params=params)
+    results = json.loads(response.text)['results']
+    return render_template('specific_artist.html', results=results)
 
 
+'''
 @app.route('/album_entry')
 @app.route('/album_result')
 '''
