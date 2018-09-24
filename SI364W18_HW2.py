@@ -75,9 +75,21 @@ def specific(artist_name):
     return render_template('specific_artist.html', results=results)
 
 
-'''
+class AlbumEntryForm(FlaskForm):
+    album = StringField('Enter the name of an album: ',
+                        validators=[Required()])
+    rating = RadioField('How much do you like this album? (1 low, 3 high) ',
+                        choices=[('low', '1'), ('medium', '2'), ('high', '3')],
+                        validators=[Required()])
+    submit = SubmitField('Submit')
+
+
 @app.route('/album_entry')
-@app.route('/album_result')
-'''
+def album_entry():
+    simpleForm = AlbumEntryForm()
+    return render_template('album_entry.html', form=simpleForm)
+# @app.route('/album_result')
+
+
 if __name__ == '__main__':
     app.run(use_reloader=True, debug=True)
